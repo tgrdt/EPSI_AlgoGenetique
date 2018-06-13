@@ -24,4 +24,18 @@ function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_lon
     return round($distance, $decimals);
 }
 
+function getQuickestWay($cities, $firstTown) {
+
+    $quickest = removeTown($cities, $firstTown);
+
+    return $quickest;
+}
+
+function removeTown($cities, $town) {
+
+    unset($cities[$town]);
+ //   var_dump($key);
+    return $cities;
+}
+
 

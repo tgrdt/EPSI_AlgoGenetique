@@ -29,15 +29,17 @@
                 $array = array();
                 $nb = 0;
 
-                echo '<h1>Début du trajet ' . firstTown . ' routes différentes.</h1>';
+                echo '<h1>Début du trajet : ' . firstTown .' </h1>';
                 echo '<br />';
 
                 foreach ($datas as $data) {
-                    $villes[$data->city] = $data->lan . ' ' .$data->lng;
+                    $cities[$data->city] = $data->lan . ' ' .$data->lng;
                 }
 
-                $combinaisons = getCombos($villes);
-
+                $quickest = getQuickestWay($cities, firstTown);
+                //$combinaisons = getCombos($villes);
+                var_dump($quickest);
+/*
                 foreach ($combinaisons as $combinaison) {
                     $arrayvilles = explode(' ', $combinaison);
                     $total = 0;
@@ -79,6 +81,8 @@
                     echo '<br />';
 
                 }
+
+                */
 
                 sort($allchemins,SORT_NUMERIC);
                 echo '<br />';

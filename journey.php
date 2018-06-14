@@ -29,6 +29,8 @@
                 $array = array();
                 $nb = 0;
 
+
+
                 echo '<h1>Début du trajet : ' . firstTown .' </h1>';
                 echo '<br />';
 
@@ -36,8 +38,10 @@
                     $cities[$data->city] = $data->lan . ' ' .$data->lng;
                 }
 
+                echo "TEST <br>";
                 $quickest = getQuickestWay($cities, firstTown);
                 //$combinaisons = getCombos($villes);
+                echo "Fin Test <br>";
                 var_dump($quickest);
 /*
                 foreach ($combinaisons as $combinaison) {

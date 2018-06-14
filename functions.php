@@ -27,14 +27,37 @@ function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_lon
 function getQuickestWay($cities, $firstTown) {
 
     $quickest = removeTown($cities, $firstTown);
+    $currentTown = $firstTown;
+    $distanceTab = array();
+    $tmpLongLat = array();
+
+
+
+    foreach ($quickest as $key=>$data) {
+        $distanceTab[$key] = getDistanceFromCity($cities[$currentTown], $data);
+    }
+    $aKeys = array_keys($distanceTab);
+
+    var_dump($distanceTab);
 
     return $quickest;
+}
+
+
+function getDistanceFromCity($city1, $city2) {
+    $_city1 = explode(" ", $city1);
+    $_city2 = explode(" ", $city2);
+    $distance = distanceCalculation($_city1[1], $_city1[0], $_city2[1], $_city2[0]);
+    echo "Distance ";
+    var_dump($distance);
+    echo " Fin distance <br>";
+
+    return $distance;
 }
 
 function removeTown($cities, $town) {
 
     unset($cities[$town]);
- //   var_dump($key);
     return $cities;
 }
 

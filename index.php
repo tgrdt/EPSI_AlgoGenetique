@@ -28,19 +28,12 @@ foreach ($datas as $key=>$data) {
     <div class="panel panel-default">
         <div class="panel-heading text-center"><h3>Algorithmes génétiques</h3></div>
         <div class="panel-body">
-        <form method="POST" action="journey.php">
-            <label>Ville de départ :</label>
-                <?php
-                $opts = '';
-                foreach($cities as $val)
-                {
-                    $opts .= '<option value="'.$val.'">'.$val.'</option>';
-                }
-                echo  '<select name="City">'.$opts.'</select>';
-                ?>
-            <br />
-            <input type="submit" class="btn btn-primary">
-        </form>
+            <form method="POST" action="journey.php">
+                <label>Taille population initiale :</label>
+                <input type="text" name="nb" class="form-control">
+                <br />
+                <input type="submit" class="btn btn-primary">
+            </form>
         </div>
     </div>
 </div>

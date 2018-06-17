@@ -24,25 +24,63 @@ function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_lon
     return round($distance, $decimals);
 }
 
-function getQuickestWay($cities, $firstTown) {
+function createPopulation($cities, $nbIteration, $datas) {
 
-    $quickest = removeTown($cities, $firstTown);
-    $currentTown = $firstTown;
-    $distanceTab = array();
-    $tmpLongLat = array();
+    $population = array();
+    echo "Boucle for createPopulation";
+    for($i = 0; $i < $nbIteration; $i++) {
 
-
-
-    foreach ($quickest as $key=>$data) {
-        $distanceTab[$key] = getDistanceFromCity($cities[$currentTown], $data);
+        $population[$i]= createCombination($cities, $population, $datas);
     }
-    $aKeys = array_keys($distanceTab);
 
-    var_dump($distanceTab);
-
-    return $quickest;
+    echo "<br> POPULATION :   <br>";
+    var_dump($population);
 }
 
+function createCombination($cities, $previousCombinations, $datas) {
+    $unique = false;
+    $sizeCombinaison = count($cities) - 1;
+    $numberUsed = array();
+    $combination = array();
+
+    while($unique == false) {
+
+        foreach($cities as $key=>$data) {
+            $aKeys = array_keys($cities);
+            $randNumber = rand(0, $sizeCombinaison);
+            $numberAlreadyUsed = true;
+            $combinationToPush = array();
+            if(count($numberUsed) != 0 ) {
+                while($numberAlreadyUsed == true) {
+                    $randNumber = rand(0, $sizeCombinaison);
+                    if(in_array($randNumber, $numberUsed) == false){
+                        $numberAlreadyUsed = false;
+                        array_push($numberUsed, $randNumber);
+                    }
+                }
+            } else if(count($numberUsed )== 0 ) {
+                array_push($numberUsed, $randNumber);
+            }
+
+            $randTown = $aKeys[$randNumber];
+            $combinationToPush[$randTown] = $cities[$randTown];
+            $combination[$randTown] = $cities[$randTown];
+        }
+
+        if(in_array($previousCombinations, $combination) == false) {
+            $unique = true;
+        }
+    }
+
+    return $combination;
+
+}
+
+function getTotalDistance($way){
+    $totalDistance = null;
+
+    return $totalDistance;
+}
 
 function getDistanceFromCity($city1, $city2) {
     $_city1 = explode(" ", $city1);
@@ -61,4 +99,42 @@ function removeTown($cities, $town) {
     return $cities;
 }
 
+//// OLD
+///
+function getQuickestWay($cities, $firstTown) {
+
+    $quickest = removeTown($cities, $firstTown);
+    $currentTown = $firstTown;
+    $distanceTab = array();
+    $tmpLongLat = array();
+
+    $aKeys = array_keys($distanceTab);
+
+    var_dump($distanceTab);
+
+    return $quickest;
+}
+
+function bestOption($originalCities, $cities, $departureTown) {
+
+    $bestTown = array();
+    $bestDist = null;
+
+    $distanceTab = array();
+    foreach ($cities as $key=>$data) {
+        $distanceTab[$key] = getDistanceFromCity($originalCities[$departureTown], $data);
+
+        if($bestTown == null && $bestDist == null) {
+            $bestTown = $data;
+            $bestDist = $distanceTab[$key];
+        } else if($bestDist != null) {
+            if($bestDist > $distanceTab[$key]) {
+                $bestTown = $data;
+                $bestDist = $distanceTab[$key];
+            }
+        }
+    }
+
+    return $bestTown;
+}
 

@@ -21,9 +21,11 @@
             include 'functions.php';
             if(!empty($_POST)) {
 
+
+
                 $json = file_get_contents('cities.json');
                 $datas = json_decode($json);
-                define('firstTown', $_POST['City']);
+                define('nbIteration', $_POST['nb']);
                 $cities = array();
                 $allWays = array();
                 $array = array();
@@ -31,18 +33,18 @@
 
 
 
-                echo '<h1>Début du trajet : ' . firstTown .' </h1>';
+                echo '<h1> Population initiale : ' . nbIteration .' </h1>';
                 echo '<br />';
 
                 foreach ($datas as $data) {
                     $cities[$data->city] = $data->lan . ' ' .$data->lng;
                 }
 
-                echo "TEST <br>";
-                $quickest = getQuickestWay($cities, firstTown);
-                //$combinaisons = getCombos($villes);
-                echo "Fin Test <br>";
-                var_dump($quickest);
+                echo " JSON = ";
+                var_dump($cities);
+                echo "<br> Fin JSON <br>";
+
+                createPopulation($cities, nbIteration, $datas);
 /*
                 foreach ($combinaisons as $combinaison) {
                     $arrayvilles = explode(' ', $combinaison);

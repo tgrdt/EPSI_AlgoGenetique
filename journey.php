@@ -44,61 +44,15 @@
                 var_dump($cities);
                 echo "<br> Fin JSON <br>";
 
-                $allWays = createPopulation($cities, nbIteration, $datas);
+                $allWays = createPopulation($cities, nbIteration);
 
                 $allWaysCalculated = calculationOfAllWays($allWays);
-                echo " <br>Distances calcul = <br>";
-                var_dump($allWaysCalculated);
-/*
-                foreach ($combinaisons as $combinaison) {
-                    $arrayvilles = explode(' ', $combinaison);
-                    $total = 0;
-                    $i = 0;
-                    $a = 0;
-                    $b = 1;
-                    $c = 2;
-                    $d = 3;
-                    $nb++;
-                    echo '<h3>Test du chemin n° '.$nb.'...</h3>';
-                    while($i < 14) {
-                        $distance = getDistance($arrayvilles[$a], $arrayvilles[$b], $arrayvilles[$c], $arrayvilles[$d]);
-                        foreach ($datas as $data) {
-                            if($data->lan == $arrayvilles[$a]){
-                                $ville1 = $data->city;
-                            }
-                            if($data->lan == $arrayvilles[$c]){
-                                $ville2 = $data->city;
-                            }
-                        }
-                        $total = $total + $distance;
-                        if($i == 0) {
-                            echo 'De <b>' .$ville1 . '</b> à <b>' . $ville2 . '</b> ('.ceil($distance/1000).' km), ';
-                            echo '<br />';
-                        } else {
-                            echo 'de <b>' .$ville1 . '</b> à <b>' . $ville2 . '</b> ('.ceil($distance/1000).' km), ';
-                            echo '<br />';
-                        }
-                        $a = $c;
-                        $b = $d;
-                        $c = $c+2;
-                        $d = $d+2;
-                        $i++;
 
-                    }
-                    array_push($allchemins, $total);
-                    echo '<br >';
-                    echo 'Distance total de : <b>' . ceil($total/1000) .' Km.</b>';
-                    echo '<br />';
-
-                }
-
-                */
                 asort($allWaysCalculated,SORT_NUMERIC);
-                echo "<br>Distance la plus court : ".current($allWaysCalculated);
+                echo "<br>Distance la plus courte : ".current($allWaysCalculated)." <br>";
+                var_dump($allWaysCalculated);
                 sort($allchemins,SORT_NUMERIC);
-                echo '<br />';
-                echo '<h2>Le chemin optimal trouvé est de : ' . ceil($allchemins[0]/1000) . ' Km.</h2>';
-                echo '<br />';
+
             } ?>
         </div>
     </div>

@@ -27,14 +27,12 @@ function distanceCalculation($point1_lat, $point1_long, $point2_lat, $point2_lon
 function createPopulation($cities, $nbIteration, $datas) {
 
     $population = array();
-    echo "Boucle for createPopulation";
     for($i = 0; $i < $nbIteration; $i++) {
 
         $population[$i]= createCombination($cities, $population, $datas);
     }
 
-    echo "<br> POPULATION :   <br>";
-    var_dump($population);
+    return $population;
 }
 
 function createCombination($cities, $previousCombinations, $datas) {
@@ -76,8 +74,38 @@ function createCombination($cities, $previousCombinations, $datas) {
 
 }
 
+function calculationOfAllWays($allWays){
+    $allWaysCalculated = array();
+    $aKeysWays = array_keys($allWays);
+    $iteratorAllWays = 0;
+
+    foreach ($allWays as $way) {
+
+        $aKeys = array_keys($way);
+        $oneWayCalculated = array();
+        for($i = 1; $i < (count($way) -1); $i++) {
+            if($i == 1) {
+                $oneWayCalculated[0] = getDistanceFromCity($way[$aKeys[0]], $way[$aKeys[$i]]);
+            } else {
+                $oneWayCalculated[$i - 1] = getDistanceFromCity($way[$aKeys[$i]], $way[$aKeys[$i +1]]);
+            }
+        }
+
+
+        $allWaysCalculated[$iteratorAllWays] = getTotalDistance($oneWayCalculated);
+        $iteratorAllWays++;
+
+    }
+
+
+    return $allWaysCalculated;
+}
+
 function getTotalDistance($way){
-    $totalDistance = null;
+    $totalDistance = 0;
+    for($i = 0; $i < count($way); $i++) {
+        $totalDistance += $way[$i];
+    }
 
     return $totalDistance;
 }
@@ -86,9 +114,6 @@ function getDistanceFromCity($city1, $city2) {
     $_city1 = explode(" ", $city1);
     $_city2 = explode(" ", $city2);
     $distance = distanceCalculation($_city1[1], $_city1[0], $_city2[1], $_city2[0]);
-    echo "Distance ";
-    var_dump($distance);
-    echo " Fin distance <br>";
 
     return $distance;
 }

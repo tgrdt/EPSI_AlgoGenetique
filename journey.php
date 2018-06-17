@@ -27,7 +27,7 @@
                 $datas = json_decode($json);
                 define('nbIteration', $_POST['nb']);
                 $cities = array();
-                $allWays = array();
+                $allWays = array(); $allWaysCalculated = array();
                 $array = array();
                 $nb = 0;
 
@@ -44,7 +44,11 @@
                 var_dump($cities);
                 echo "<br> Fin JSON <br>";
 
-                createPopulation($cities, nbIteration, $datas);
+                $allWays = createPopulation($cities, nbIteration, $datas);
+
+                $allWaysCalculated = calculationOfAllWays($allWays);
+                echo " <br>Distances calcul = <br>";
+                var_dump($allWaysCalculated);
 /*
                 foreach ($combinaisons as $combinaison) {
                     $arrayvilles = explode(' ', $combinaison);
@@ -89,7 +93,8 @@
                 }
 
                 */
-
+                asort($allWaysCalculated,SORT_NUMERIC);
+                echo "<br>Distance la plus court : ".current($allWaysCalculated);
                 sort($allchemins,SORT_NUMERIC);
                 echo '<br />';
                 echo '<h2>Le chemin optimal trouvé est de : ' . ceil($allchemins[0]/1000) . ' Km.</h2>';

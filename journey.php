@@ -40,18 +40,26 @@
                     $cities[$data->city] = $data->lan . ' ' .$data->lng;
                 }
 
-                echo " JSON = ";
-                var_dump($cities);
-                echo "<br> Fin JSON <br>";
+      //          echo " JSON = ";
+      //          var_dump($cities);
+      //          echo "<br> Fin JSON <br>";
 
                 $allWays = createPopulation($cities, nbIteration);
-
                 $allWaysCalculated = calculationOfAllWays($allWays);
-
-                asort($allWaysCalculated,SORT_NUMERIC);
-                echo "<br>Distance la plus courte : ".current($allWaysCalculated)." <br>";
-                var_dump($allWaysCalculated);
-                sort($allchemins,SORT_NUMERIC);
+                $elitePopulation = getElite($allWays, $allWaysCalculated, nbIteration);
+             //   echo "<br>ELITE : <br>";
+               // var_dump($elitePopulation);
+                $bestWay = bestCombination($elitePopulation);
+                $bestWayDistance = bestCombinationDistance($elitePopulation);
+               // asort($allWaysCalculated,SORT_NUMERIC);
+               // echo "<br>Distance la plus courte : ".current($allWaysCalculated)." <br>";
+                echo "<br>Distance la plus courte : ".$bestWayDistance." <br>";
+                echo " Le chemin est composé des villes suivantes : <br>";
+                foreach ($bestWay as $key=>$city){
+                    echo $key."<br>";
+                }
+              //  var_dump($allWaysCalculated);
+              //  sort($allchemins,SORT_NUMERIC);
 
             } ?>
         </div>

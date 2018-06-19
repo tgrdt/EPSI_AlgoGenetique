@@ -110,7 +110,7 @@ function getTotalDistance($way){
 function getDistanceFromCity($city1, $city2) {
     $_city1 = explode(" ", $city1);
     $_city2 = explode(" ", $city2);
-    $distance = distanceCalculation($_city1[1], $_city1[0], $_city2[1], $_city2[0]);
+    $distance = distanceCalculation($_city1[1], $_city1[0], $_city2[1], $_city2[0], 'km',  2);
 
     return $distance;
 }
@@ -121,42 +121,39 @@ function removeTown($cities, $town) {
     return $cities;
 }
 
-//// OLD
-///
-function getQuickestWay($cities, $firstTown) {
-
-    $quickest = removeTown($cities, $firstTown);
-    $currentTown = $firstTown;
-    $distanceTab = array();
-    $tmpLongLat = array();
-
-    $aKeys = array_keys($distanceTab);
-
-    var_dump($distanceTab);
-
-    return $quickest;
-}
-
-function bestOption($originalCities, $cities, $departureTown) {
-
-    $bestTown = array();
-    $bestDist = null;
-
-    $distanceTab = array();
-    foreach ($cities as $key=>$data) {
-        $distanceTab[$key] = getDistanceFromCity($originalCities[$departureTown], $data);
-
-        if($bestTown == null && $bestDist == null) {
-            $bestTown = $data;
-            $bestDist = $distanceTab[$key];
-        } else if($bestDist != null) {
-            if($bestDist > $distanceTab[$key]) {
-                $bestTown = $data;
-                $bestDist = $distanceTab[$key];
-            }
-        }
+function getElite($allWays, $allWaysCalculated, $nbIteration) {
+    asort($allWaysCalculated,SORT_NUMERIC);
+    $i = 0;
+    $eliteArrayCombination = array();
+    if($nbIteration % 2 == 0) {
+        $sizeElite = $nbIteration / 2;
+    } else{
+        $sizeElite = ($nbIteration - 1) / 2;
     }
 
-    return $bestTown;
+    foreach ($allWaysCalculated as $key=>$way) {
+        if($i < $sizeElite) {
+         //   echo $i." key ".$key." distance : ".$way."<br>";
+            $eliteArrayCombination[$i] = $allWays[$key];
+        }
+        $i++;
+    }
+
+    return $eliteArrayCombination;
 }
 
+function bestCombination($population) {
+
+    $populationCalculated = calculationOfAllWays($population);
+    asort($populationCalculated, SORT_NUMERIC);
+    $keyBestWay = key($populationCalculated);
+    $optimalWay = $population[$keyBestWay];
+    return $optimalWay;
+}
+
+function bestCombinationDistance($population) {
+    $populationCalculated = calculationOfAllWays($population);
+    asort($populationCalculated, SORT_NUMERIC);
+    $optimalWay = current($populationCalculated);
+    return $optimalWay;
+}

@@ -19,6 +19,8 @@
             <a class="btn-lg btn-primary" role="button" href="index.php" style="position: fixed; right: 25%; top:7%">&nbsp;&nbsp;Retour&nbsp;&nbsp;</a>
             <?php
             include 'functions.php';
+            ini_set('memory_limit', '-1');
+            set_time_limit(10000);
             if(!empty($_POST)) {
 
 
@@ -45,10 +47,27 @@
       //          echo "<br> Fin JSON <br>";
 
                 $allWays = createPopulation($cities, nbIteration);
+      //          echo "<br>Population : <br>";
+      //          var_dump($allWays);
                 $allWaysCalculated = calculationOfAllWays($allWays);
+      //          echo "<br>Distance : <br>";
+      //          var_dump($allWaysCalculated);
+                $bestWay = bestCombination($allWays);
+                $bestWayDistance = bestCombinationDistance($allWays);
+                // asort($allWaysCalculated,SORT_NUMERIC);
+                // echo "<br>Distance la plus courte : ".current($allWaysCalculated)." <br>";
+                echo "<br>Distance la plus courte : ".$bestWayDistance." <br>";
+                echo " Le chemin est composé des villes suivantes : <br>";
+                foreach ($bestWay as $key=>$city){
+                    echo $key."<br>";
+                }
+
                 $elitePopulation = getElite($allWays, $allWaysCalculated, nbIteration);
-             //   echo "<br>ELITE : <br>";
-               // var_dump($elitePopulation);
+
+                for($x =0; $x < 10; $x++) {
+                    $elitePopulation = coreFunction($elitePopulation, nbIteration);
+                }
+
                 $bestWay = bestCombination($elitePopulation);
                 $bestWayDistance = bestCombinationDistance($elitePopulation);
                // asort($allWaysCalculated,SORT_NUMERIC);

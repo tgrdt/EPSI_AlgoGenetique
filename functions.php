@@ -125,11 +125,16 @@ function getElite($allWays, $allWaysCalculated, $nbIteration) {
     asort($allWaysCalculated,SORT_NUMERIC);
     $i = 0;
     $eliteArrayCombination = array();
-    if($nbIteration % 2 == 0) {
-        $sizeElite = $nbIteration / 2;
-    } else{
-        $sizeElite = ($nbIteration - 1) / 2;
+    if($nbIteration < 10) {
+        if($nbIteration % 2 == 0) {
+            $sizeElite = $nbIteration / 2;
+        } else{
+            $sizeElite = ($nbIteration - 1) / 2;
+        }
+    } else {
+        $sizeElite = 10;
     }
+
 
     foreach ($allWaysCalculated as $key=>$way) {
         if($i < $sizeElite) {
@@ -140,6 +145,88 @@ function getElite($allWays, $allWaysCalculated, $nbIteration) {
     }
 
     return $eliteArrayCombination;
+}
+
+function recreatePopulation($elite, $sizeInitialPopulation){
+
+    shuffle($elite);
+    $newPopulation = $elite;
+    $aKeys = array_keys($elite);
+    $i = 0;
+    while(count($newPopulation) < $sizeInitialPopulation) {
+        $newChild = array();
+        $randDifferent = false;
+        $randNumber1 = rand(0, count($elite) -1);
+        while($randDifferent == false) {
+            $randNumber2 = rand(0, count($elite) -1);
+            if($randNumber1 != $randNumber2){
+                $randDifferent = true;
+            }
+        }
+        $combination1 = $elite[$aKeys[$randNumber1]];
+        $combination2 = $elite[$aKeys[$randNumber2]];
+
+        if($i % 2 == 0) {
+            $newChild = createChild($combination2, $combination1);
+        } else {
+            $newChild = createChild($combination1, $combination2);
+        }
+        $i++;
+        array_push($newPopulation, $newChild);
+
+    }
+
+    return $newPopulation;
+
+}
+
+function createChild($combination1, $combination2) {
+    $i=0;
+    foreach ($combination1 as $key=>$data){
+        if($i < (count($combination1) / 2)) {
+            $newChild[$key] = $data;
+        }
+        $i++;
+    }
+
+    foreach ($combination2 as $key=>$data) {
+        if(in_array($key, $newChild) == false) {
+            $newChild[$key] = $data;
+        }
+    }
+
+    return $newChild;
+}
+
+function mutationOnPopulation($population) {
+    $i = 0;
+    foreach($population as $key=>$data){
+        if($i % 10 == 0) {
+            $aKeys = array_keys($data);
+            $randDifferent = false;
+            $randNumber1 = rand(0, count($data) -1);
+            while($randDifferent == false) {
+                $randNumber2 = rand(0, count($data) -1);
+                if($randNumber1 != $randNumber2){
+                    $randDifferent = true;
+                }
+            }
+            $tmp1 = $data[$aKeys[$randNumber1]];
+            $tmp2 = $data[$aKeys[$randNumber2]];
+
+            $data[$aKeys[$randNumber1]] = $tmp2;
+            $data[$aKeys[$randNumber2]] = $tmp1;
+        }
+        $i++;
+    }
+}
+
+function coreFunction($population, $nbIteration) {
+    $populationCalculated = calculationOfAllWays($population);
+    $elitePopulation = getElite($population, $populationCalculated, $nbIteration);
+    $population = recreatePopulation($elitePopulation, $nbIteration);
+    //$population = mutationOnPopulation($population);
+    return $population;
 }
 
 function bestCombination($population) {

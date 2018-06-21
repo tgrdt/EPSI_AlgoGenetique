@@ -125,14 +125,14 @@ function getElite($allWays, $allWaysCalculated, $nbIteration) {
     asort($allWaysCalculated,SORT_NUMERIC);
     $i = 0;
     $eliteArrayCombination = array();
-    if($nbIteration < 10) {
+    if($nbIteration < 31) {
         if($nbIteration % 2 == 0) {
             $sizeElite = $nbIteration / 2;
         } else{
             $sizeElite = ($nbIteration - 1) / 2;
         }
     } else {
-        $sizeElite = 10;
+        $sizeElite = 30;
     }
 
 
@@ -152,14 +152,13 @@ function recreatePopulation($elite, $sizeInitialPopulation){
     shuffle($elite);
     $newPopulation = $elite;
     $aKeys = array_keys($elite);
-    $i = 0;
-    while(count($newPopulation) < $sizeInitialPopulation) {
-        $newChild = array();
+    $tmp10 = 0;
+    for($i = 0; $i < $sizeInitialPopulation; $i++) {
         $randDifferent = false;
-        $randNumber1 = rand(0, count($elite) -1);
+        $randNumber1 = rand(0, count($elite)-1);
         while($randDifferent == false) {
             $randNumber2 = rand(0, count($elite) -1);
-            if($randNumber1 != $randNumber2){
+            if($randNumber2 != $randNumber1) {
                 $randDifferent = true;
             }
         }
@@ -171,9 +170,12 @@ function recreatePopulation($elite, $sizeInitialPopulation){
         } else {
             $newChild = createChild($combination1, $combination2);
         }
-        $i++;
+        if($tmp10 == 10) {
+            mutationOnChild($newChild);
+            $tmp10 = 0;
+        }
+        $tmp10++;
         array_push($newPopulation, $newChild);
-
     }
 
     return $newPopulation;
@@ -198,34 +200,41 @@ function createChild($combination1, $combination2) {
     return $newChild;
 }
 
-function mutationOnPopulation($population) {
-    $i = 0;
-    foreach($population as $key=>$data){
-        if($i % 10 == 0) {
-            $aKeys = array_keys($data);
-            $randDifferent = false;
-            $randNumber1 = rand(0, count($data) -1);
-            while($randDifferent == false) {
-                $randNumber2 = rand(0, count($data) -1);
-                if($randNumber1 != $randNumber2){
-                    $randDifferent = true;
-                }
-            }
-            $tmp1 = $data[$aKeys[$randNumber1]];
-            $tmp2 = $data[$aKeys[$randNumber2]];
-
-            $data[$aKeys[$randNumber1]] = $tmp2;
-            $data[$aKeys[$randNumber2]] = $tmp1;
+function mutationOnChild($population) {
+   
+    $aKeys = array_keys($population);
+    $randDifferent = false;
+    $randNumber1 = rand(0, count($population)-1);
+    while($randDifferent == false) {
+        $randNumber2 = rand(0, count($population) -1);
+        if($randNumber2 != $randNumber1) {
+            $randDifferent = true;
         }
-        $i++;
     }
+
+    $tmp1 = $population[$aKeys[$randNumber1]];
+    $keyTmp1 =  array_search($tmp1, $population);
+    $tmp2 = $population[$aKeys[$randNumber2]];
+    $keyTmp2 =  array_search($tmp2, $population);
+
+    foreach ($population as $key=>$data) {
+        if($key == $keyTmp1) {
+            $newCombination[$keyTmp2] = $tmp2;
+        }else if($key == $keyTmp2) {
+            $newCombination[$keyTmp1] = $tmp1;
+        } else {
+            $newCombination[$key] = $data;
+        }
+
+    }
+
+    return($newCombination);
 }
 
 function coreFunction($population, $nbIteration) {
     $populationCalculated = calculationOfAllWays($population);
     $elitePopulation = getElite($population, $populationCalculated, $nbIteration);
     $population = recreatePopulation($elitePopulation, $nbIteration);
-    //$population = mutationOnPopulation($population);
     return $population;
 }
 

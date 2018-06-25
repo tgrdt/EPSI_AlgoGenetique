@@ -30,8 +30,12 @@ foreach ($datas as $key=>$data) {
         <div class="panel-body">
             <form method="POST" action="journey.php">
                 <label>Taille population initiale :</label>
-                <input type="text" name="nb" class="form-control">
+                <input type="text" name="nbPopulation" class="form-control">
                 <br />
+                <label> Nombre d'itération souhaité :</label>
+                <label> (Attention, plus le nombre d'itération est grand, plus le traitement sera long)</label>
+                <input type="text" name="nbIterator" class="form-control">
+                <br>
                 <input type="submit" class="btn btn-primary">
             </form>
         </div>

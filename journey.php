@@ -28,6 +28,7 @@
                 $json = file_get_contents('cities.json');
                 $datas = json_decode($json);
                 define('nbIteration', $_POST['nb']);
+                define('nbIterator', $_POST['nbIterator']);
                 $cities = array();
                 $allWays = array(); $allWaysCalculated = array();
                 $array = array();
@@ -64,7 +65,7 @@
 
                 $elitePopulation = getElite($allWays, $allWaysCalculated, nbIteration);
 
-                for($x =0; $x < 10; $x++) {
+                for($x =0; $x < nbIterator; $x++) {
                     $elitePopulation = coreFunction($elitePopulation, nbIteration);
                 }
 

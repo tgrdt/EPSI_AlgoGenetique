@@ -201,7 +201,7 @@ function createChild($combination1, $combination2) {
 }
 
 function mutationOnChild($population) {
-   
+
     $aKeys = array_keys($population);
     $randDifferent = false;
     $randNumber1 = rand(0, count($population)-1);

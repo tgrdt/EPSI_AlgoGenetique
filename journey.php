@@ -27,7 +27,7 @@
 
                 $json = file_get_contents('cities.json');
                 $datas = json_decode($json);
-                define('nbIteration', $_POST['nb']);
+                define('nbIteration', $_POST['nbPopulation']);
                 define('nbIterator', $_POST['nbIterator']);
                 $cities = array();
                 $allWays = array(); $allWaysCalculated = array();
